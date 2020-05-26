@@ -1,7 +1,7 @@
 ﻿<Properties StartupConfiguration="{C9B6603F-DCB2-46E4-99B7-E5DC839E96B7}|Default">
   <MonoDevelop.Ide.Workbench ActiveDocument="Simple_Call_Response/Program.cs">
     <Files>
-      <File FileName="Simple_Call_Response/Program.cs" Line="13" Column="1" />
+      <File FileName="Simple_Call_Response/Program.cs" Line="103" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -21,5 +21,5 @@
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MultiItemStartupConfigurations />
-  <MonoDevelop.Ide.ItemProperties.Simple__Call__Response FirstBuild="True" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.ItemProperties.Simple__Call__Response PreferredExecutionTarget="MonoDevelop.Default" />
 </Properties>

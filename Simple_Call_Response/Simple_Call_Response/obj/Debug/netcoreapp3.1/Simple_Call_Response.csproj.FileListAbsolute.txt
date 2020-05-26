@@ -1,0 +1,12 @@
+/Users/fk/Projects/SkoleGit/network-programming-Fadil2k/Simple_Call_Response/Simple_Call_Response/obj/Debug/netcoreapp3.1/Simple_Call_Response.csprojAssemblyReference.cache
+/Users/fk/Projects/SkoleGit/network-programming-Fadil2k/Simple_Call_Response/Simple_Call_Response/obj/Debug/netcoreapp3.1/Simple_Call_Response.AssemblyInfoInputs.cache
+/Users/fk/Projects/SkoleGit/network-programming-Fadil2k/Simple_Call_Response/Simple_Call_Response/obj/Debug/netcoreapp3.1/Simple_Call_Response.AssemblyInfo.cs
+/Users/fk/Projects/SkoleGit/network-programming-Fadil2k/Simple_Call_Response/Simple_Call_Response/obj/Debug/netcoreapp3.1/Simple_Call_Response.csproj.CoreCompileInputs.cache
+/Users/fk/Projects/SkoleGit/network-programming-Fadil2k/Simple_Call_Response/Simple_Call_Response/bin/Debug/netcoreapp3.1/Simple_Call_Response.deps.json
+/Users/fk/Projects/SkoleGit/network-programming-Fadil2k/Simple_Call_Response/Simple_Call_Response/bin/Debug/netcoreapp3.1/Simple_Call_Response.runtimeconfig.json
+/Users/fk/Projects/SkoleGit/network-programming-Fadil2k/Simple_Call_Response/Simple_Call_Response/bin/Debug/netcoreapp3.1/Simple_Call_Response.runtimeconfig.dev.json
+/Users/fk/Projects/SkoleGit/network-programming-Fadil2k/Simple_Call_Response/Simple_Call_Response/bin/Debug/netcoreapp3.1/Simple_Call_Response.dll
+/Users/fk/Projects/SkoleGit/network-programming-Fadil2k/Simple_Call_Response/Simple_Call_Response/bin/Debug/netcoreapp3.1/Simple_Call_Response.pdb
+/Users/fk/Projects/SkoleGit/network-programming-Fadil2k/Simple_Call_Response/Simple_Call_Response/obj/Debug/netcoreapp3.1/Simple_Call_Response.dll
+/Users/fk/Projects/SkoleGit/network-programming-Fadil2k/Simple_Call_Response/Simple_Call_Response/obj/Debug/netcoreapp3.1/Simple_Call_Response.pdb
+/Users/fk/Projects/SkoleGit/network-programming-Fadil2k/Simple_Call_Response/Simple_Call_Response/obj/Debug/netcoreapp3.1/Simple_Call_Response.genruntimeconfig.cache
