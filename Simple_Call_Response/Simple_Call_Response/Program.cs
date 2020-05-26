@@ -151,7 +151,7 @@ namespace Simple_Call_Response
 
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 Console.WriteLine("Error: Couldn't connect to the server you specified.");
             }
