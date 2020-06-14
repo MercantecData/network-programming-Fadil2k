@@ -1,161 +1,207 @@
 ﻿using System;
 using System.Net.Sockets;
 using System.Net;
+using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
+
 
 namespace Simple_Call_Response
 {
     class Program
     {
+
+        public static Settings settings;
+        public static List<TcpClient> lstClients = new List<TcpClient>();
+
         static void Main(string[] args)
         {
-            // "tryAgain" bool
-            bool TA1 = true;
-            //Loop to be able to go back to the beginning with!back command
-            while (TA1 == true) {
 
 
-            //Specify choice of application
-            Console.WriteLine("Do you want to start a client or a server?");
-            Console.WriteLine("Choose a number:");
-            Console.WriteLine("1 : Server");
-            Console.WriteLine("2 : Client");
-            int option = Int16.Parse(Console.ReadLine());
-
-
-            Console.Clear();
-
-            //Specify port
-            Console.WriteLine("Which port would you like to use?");
-            int port = Int16.Parse(Console.ReadLine());
-
-
-            
-            bool TA2 = true;
-            //Loop to make sure the rights arguments are passed to the server or client
-            while (TA2)
+            settings = InitializeSettings();
+            Console.WriteLine("Welcome to Chatio");
+            Console.WriteLine("Type !help for commands");
+            while (true)
             {
-                switch (option)
+
+                string a = Console.ReadLine();
+
+                if (a[0] == '!')
                 {
-                    case 1:
-                        TA2 = false;
-                            option1(port);
-                        break;
+                    Console.Clear();
+                    switch (a)
+                    {
+                        case "!help":
+                            Commands.Help();
+                            break;
+                        case "!name":
+                            string name;
+                            Console.WriteLine("Input name");
 
-                    case 2:
-                        TA2 = false;
-                            option2(port);
-                        break;
+                                name =  Console.ReadLine();
+                                settings.Name = name;
+                                Console.WriteLine("name set to: "+ settings.Name);
 
-                    default:
-                        Console.WriteLine("Error try again");
-                        break;
+                            
+                            break;
+
+                        case "!ip":
+                            string ipA;
+                            Console.WriteLine("Input IP");
+                            ipA = Console.ReadLine();
+                            if (!IsIP(ipA) == true)
+                                {
+
+                                Console.WriteLine("Wrong input. try again.");
+                            }
+                            else
+                            {
+                                settings.IP = ipA;
+                                Console.WriteLine("IP set to: " + settings.IP);
+
+                            }
+                            break;
+
+                        case "!port":
+                            int PORT;
+                            Console.WriteLine("Input port");
+                            if (!int.TryParse(Console.ReadLine(), out PORT))
+                            {
+
+                                Console.WriteLine("Wrong input. try again.");
+                            }
+                            else
+                            {
+                                settings.Port = PORT;
+                                Console.WriteLine("Port set to: " + settings.Port);
+
+                            }
+                            break;
+
+                        case "!server":
+                            
+                            settings.ServerE = true;
+                            settings.ClientE = false;
+                            Server();
+                           
+                            break;
+                        case "!client":
+
+                            settings.ClientE = true;
+                            settings.ServerE = false;
+                            Client();
+
+                            break;
+                        case "!clear":
+                            Console.Clear();
+                            break;
+                        default:
+                            Console.WriteLine("Unknown command");
+                            break;
+                    }
+
+
+
                 }
+
+
+
+
             }
         }
-       }
 
-        
-        public static void option1(int port)
+        public static async void ReceiveMessage(NetworkStream stream)
         {
-            Console.WriteLine("You chose to run as server");
-            Server(port);
-        }
-
-        //Divided the two options into two functions for better structure and easier overview
-
-        public static void option2(int port)
-        {
-            Console.WriteLine("You chose to run as client");
-            Console.WriteLine("Type IP-A of the server.");
-            string ip = Console.ReadLine();
-            if (IsIP(ip) == true)
+            byte[] buffer = new byte[255];
+            while (true)
             {
-                Console.WriteLine("Enter a username");
-                string username = Console.ReadLine();
-                Client(ip, port, username);
-            }
-            else
-            {
-                Console.WriteLine("Error try again");
+                int numberOfBytesRead = await stream.ReadAsync(buffer, 0, 255);
+                string receivedMessage = Encoding.UTF8.GetString(buffer, 0, numberOfBytesRead);
+
+                Console.WriteLine("\n" + receivedMessage);
             }
         }
 
 
-        public static NetworkStream ConnectToServer(IPEndPoint endpoint, TcpClient localClient)
+
+
+        public static async Task<NetworkStream> ClientConnect(TcpListener listener)
         {
-            localClient.Connect(endpoint);
-            NetworkStream stream = localClient.GetStream();
+            listener.Start();
+            Console.WriteLine("Awaiting Clients");
+
+            TcpClient client = await listener.AcceptTcpClientAsync();
+
+            NetworkStream stream = client.GetStream();
             return stream;
         }
 
 
-        //Server taking port as argument.
-        public static void Server(int port) {
+        //Server
+        public static async void Server()
+        {
+            while (settings.ServerE == true) { 
             IPAddress ip = IPAddress.Any;
-            IPEndPoint localEndpoint = new IPEndPoint(ip, port);
+            IPEndPoint endpoint = new IPEndPoint(ip, settings.Port);
+                //Use port from settings
 
-            TcpListener listener = new TcpListener(localEndpoint);
-            listener.Start();
+            TcpListener listener = new TcpListener(endpoint);
 
-            Console.WriteLine("Awaiting Clients");
-            TcpClient client = listener.AcceptTcpClient();
+            Task<NetworkStream> stream = ClientConnect(listener);
 
-            NetworkStream stream = client.GetStream();
+            NetworkStream streamR = stream.Result;
 
-            byte[] buffer = new byte[256];
+            byte[] buffer = new byte[255];
 
-            int numberOfBytesRead = stream.Read(buffer, 0, 256);
+            int numberOfBytesRead = await streamR.ReadAsync(buffer, 0, 255);
 
             string message = Encoding.UTF8.GetString(buffer, 0, numberOfBytesRead);
 
             Console.WriteLine(message);
+            }
         }
 
         //Client taking ip, port and username as arguments.
-        public static void Client(string ip, int port, string username)
+        public static void Client()
         {
-            TcpClient client = new TcpClient();
-
-
-
-            IPAddress ipA = IPAddress.Parse(ip);
-            IPEndPoint endPoint = new IPEndPoint(ipA, port);
-
-            try
+            while (settings.ClientE == true)
             {
-                bool TA3 = true;
-                while (TA3 == true)
+                TcpClient client = new TcpClient();
+
+                
+
+                IPAddress ipA = IPAddress.Parse(settings.IP);
+                IPEndPoint endPoint = new IPEndPoint(ipA, settings.Port);
+
+                try
                 {
-                    string cmd = Console.ReadLine();
-                    if (cmd != "!back") 
+                    
+                    while (true)
                     {
 
-                    string text = username + ": " + Console.ReadLine();
-                    client.Connect(endPoint);
+                            string text = settings.Name + ": " + Console.ReadLine();
+                            client.Connect(endPoint);
 
-                    NetworkStream stream = client.GetStream();
+                            NetworkStream stream = client.GetStream();
 
-          
-                    byte[] buffer = Encoding.UTF8.GetBytes(text);
 
-                    stream.Write(buffer, 0, buffer.Length);
+                            byte[] buffer = Encoding.UTF8.GetBytes(text);
 
-                        break;
-                        } else
-                    {
-                        client.Close();
-                        TA3 = false;
-                        
+                            stream.Write(buffer, 0, buffer.Length);
+
+                            break;
+                        }
+                         
                     }
-
+            catch (Exception)
+                {
+                    Console.WriteLine("Error: Couldn't connect to the server you specified.");
                 }
             }
-            catch (Exception)
-            {
-                Console.WriteLine("Error: Couldn't connect to the server you specified.");
-            }
         }
+
+
+
 
         //Check if the user input is a ip or not.
         private static bool IsIP(string ip)
@@ -177,5 +223,19 @@ namespace Simple_Call_Response
         }
 
 
+        static Settings InitializeSettings()
+        {
+            Settings settings = new Settings();
+            
+            return settings;
+        }
+
+
+
+
+
+
+
     }
 }
+
